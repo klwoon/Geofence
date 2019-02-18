@@ -12,7 +12,8 @@
 		691388E7221AC1FA00EA3705 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 691388E5221AC1FA00EA3705 /* Main.storyboard */; };
 		691388E9221AC21100EA3705 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 691388E8221AC21100EA3705 /* Assets.xcassets */; };
 		691388EC221AC21100EA3705 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 691388EA221AC21100EA3705 /* LaunchScreen.storyboard */; };
-		691388F7221AC21100EA3705 /* GeofenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691388F6221AC21100EA3705 /* GeofenceTests.swift */; };
+		691388F7221AC21100EA3705 /* GeoDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691388F6221AC21100EA3705 /* GeoDataTests.swift */; };
+		69138907221AEAC800EA3705 /* GeoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69138906221AEAC800EA3705 /* GeoData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,9 +35,10 @@
 		691388EB221AC21100EA3705 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		691388ED221AC21100EA3705 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		691388F2221AC21100EA3705 /* GeofenceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeofenceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		691388F6221AC21100EA3705 /* GeofenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceTests.swift; sourceTree = "<group>"; };
+		691388F6221AC21100EA3705 /* GeoDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoDataTests.swift; sourceTree = "<group>"; };
 		691388F8221AC21100EA3705 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69138903221AE2AF00EA3705 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		69138906221AEAC800EA3705 /* GeoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				691388E1221AC1F900EA3705 /* AppDelegate.swift */,
 				69138904221AE36200EA3705 /* ViewController */,
 				69138905221AE37B00EA3705 /* View */,
+				69138908221AEAD600EA3705 /* Model */,
 				691388E8221AC21100EA3705 /* Assets.xcassets */,
 				691388ED221AC21100EA3705 /* Info.plist */,
 			);
@@ -91,7 +94,7 @@
 		691388F5221AC21100EA3705 /* GeofenceTests */ = {
 			isa = PBXGroup;
 			children = (
-				691388F6221AC21100EA3705 /* GeofenceTests.swift */,
+				6913890A221AF29200EA3705 /* Model */,
 				691388F8221AC21100EA3705 /* Info.plist */,
 			);
 			path = GeofenceTests;
@@ -112,6 +115,22 @@
 				691388EA221AC21100EA3705 /* LaunchScreen.storyboard */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		69138908221AEAD600EA3705 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69138906221AEAC800EA3705 /* GeoData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6913890A221AF29200EA3705 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				691388F6221AC21100EA3705 /* GeoDataTests.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69138907221AEAC800EA3705 /* GeoData.swift in Sources */,
 				691388E4221AC1F900EA3705 /* GeofenceViewController.swift in Sources */,
 				691388E2221AC1F900EA3705 /* AppDelegate.swift in Sources */,
 			);
@@ -224,7 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				691388F7221AC21100EA3705 /* GeofenceTests.swift in Sources */,
+				691388F7221AC21100EA3705 /* GeoDataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
