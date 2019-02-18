@@ -14,6 +14,10 @@
 		691388EC221AC21100EA3705 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 691388EA221AC21100EA3705 /* LaunchScreen.storyboard */; };
 		691388F7221AC21100EA3705 /* GeoDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691388F6221AC21100EA3705 /* GeoDataTests.swift */; };
 		69138907221AEAC800EA3705 /* GeoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69138906221AEAC800EA3705 /* GeoData.swift */; };
+		6913890C221AFE2900EA3705 /* GeofenceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6913890B221AFE2900EA3705 /* GeofenceViewModel.swift */; };
+		6913890F221B070D00EA3705 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6913890E221B070D00EA3705 /* Constant.swift */; };
+		69138912221B0DDD00EA3705 /* GeofenceViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69138911221B0DDD00EA3705 /* GeofenceViewModelTests.swift */; };
+		69138915221B0E6500EA3705 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69138914221B0E6500EA3705 /* MockData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +43,10 @@
 		691388F8221AC21100EA3705 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69138903221AE2AF00EA3705 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		69138906221AEAC800EA3705 /* GeoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoData.swift; sourceTree = "<group>"; };
+		6913890B221AFE2900EA3705 /* GeofenceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceViewModel.swift; sourceTree = "<group>"; };
+		6913890E221B070D00EA3705 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		69138911221B0DDD00EA3705 /* GeofenceViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofenceViewModelTests.swift; sourceTree = "<group>"; };
+		69138914221B0E6500EA3705 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +93,8 @@
 				69138904221AE36200EA3705 /* ViewController */,
 				69138905221AE37B00EA3705 /* View */,
 				69138908221AEAD600EA3705 /* Model */,
+				6913890D221B054100EA3705 /* ViewModel */,
+				69138910221B078C00EA3705 /* Helper */,
 				691388E8221AC21100EA3705 /* Assets.xcassets */,
 				691388ED221AC21100EA3705 /* Info.plist */,
 			);
@@ -95,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				6913890A221AF29200EA3705 /* Model */,
+				69138913221B0DE200EA3705 /* ViewModel */,
 				691388F8221AC21100EA3705 /* Info.plist */,
 			);
 			path = GeofenceTests;
@@ -129,8 +140,33 @@
 			isa = PBXGroup;
 			children = (
 				691388F6221AC21100EA3705 /* GeoDataTests.swift */,
+				69138914221B0E6500EA3705 /* MockData.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		6913890D221B054100EA3705 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6913890B221AFE2900EA3705 /* GeofenceViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		69138910221B078C00EA3705 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				6913890E221B070D00EA3705 /* Constant.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		69138913221B0DE200EA3705 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				69138911221B0DDD00EA3705 /* GeofenceViewModelTests.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +272,8 @@
 			files = (
 				69138907221AEAC800EA3705 /* GeoData.swift in Sources */,
 				691388E4221AC1F900EA3705 /* GeofenceViewController.swift in Sources */,
+				6913890F221B070D00EA3705 /* Constant.swift in Sources */,
+				6913890C221AFE2900EA3705 /* GeofenceViewModel.swift in Sources */,
 				691388E2221AC1F900EA3705 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,6 +282,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69138912221B0DDD00EA3705 /* GeofenceViewModelTests.swift in Sources */,
+				69138915221B0E6500EA3705 /* MockData.swift in Sources */,
 				691388F7221AC21100EA3705 /* GeoDataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GeoData {
+struct GeoData: Codable {
     var id: Int = 0
     var latitude: Double
     var longitude: Double

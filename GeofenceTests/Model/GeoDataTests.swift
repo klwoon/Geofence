@@ -13,19 +13,13 @@ class GeoDataTests: XCTestCase {
 
     func testGeoDataInit() {
         
-        let id = 123
-        let latitude = 3.140543
-        let longitude = 101.695231
-        let radius = 500
-        let ssid = "Test Wifi"
+        let object = GeoData.mock()
         
-        let object = GeoData(id: id, latitude: latitude, longitude: longitude, radius: radius, ssid: ssid)
-        
-        XCTAssertEqual(object.id, id)
-        XCTAssertEqual(object.latitude, latitude)
-        XCTAssertEqual(object.longitude, longitude)
-        XCTAssertEqual(object.radius, radius)
-        XCTAssertEqual(object.ssid, ssid)
+        XCTAssertEqual(object.id, MockData.id)
+        XCTAssertEqual(object.latitude, MockData.latitude)
+        XCTAssertEqual(object.longitude, MockData.longitude)
+        XCTAssertEqual(object.radius, MockData.radius)
+        XCTAssertEqual(object.ssid, MockData.ssid)
         
     }
 
