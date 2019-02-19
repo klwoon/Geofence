@@ -8,18 +8,24 @@
 
 import UIKit
 import MapKit
+import RxSwift
+import RxCocoa
 
 class GeofenceViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var updateButton: UIBarButtonItem!
     
     var locationManager = CLLocationManager()
+    let bag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        setupBinding()
         setupMapView()
+        
     }
 
     private func setupMapView() {
@@ -27,10 +33,25 @@ class GeofenceViewController: UIViewController {
         locationManager.requestAlwaysAuthorization()
     }
     
+    private func setupBinding() {
+        updateButton.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                guard let controller = UIStoryboard(name: StoryboardId.main, bundle: nil).instantiateViewController(withIdentifier: StoryboardId.updateGeofenceViewController) as? UpdateGeofenceViewController else { return }
+                let navController = UINavigationController(rootViewController: controller)
+                self?.present(navController, animated: true, completion: nil)
+            })
+            .disposed(by: bag)
+        
+    }
+    
     func zoom(to coordinate: CLLocationCoordinate2D? = nil) {
         let location = coordinate ?? mapView.userLocation.coordinate
         let region = MKCoordinateRegion(center: location, latitudinalMeters: 10000, longitudinalMeters: 10000)
         mapView.setRegion(region, animated: true)
+    }
+    
+    deinit {
+        print("deinit: \(String(describing: type(of: self)))")
     }
 
 }

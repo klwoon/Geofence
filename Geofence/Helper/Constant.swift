@@ -11,3 +11,8 @@ import Foundation
 struct Constant {
     static let geoDataKey = "geofence_data"
 }
+
+struct StoryboardId {
+    static let main = "Main"
+    static let updateGeofenceViewController = "UpdateGeofenceViewController"
+}
