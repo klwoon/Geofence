@@ -10,6 +10,7 @@ import Foundation
 
 protocol ViewModel {
     var geoData: GeoData { get }
+    func updateCoordinate(latitude: Double, longitude: Double)
 }
 
 protocol PersistData {
@@ -22,6 +23,11 @@ class GeofenceViewModel: ViewModel {
     
     init(geoData: GeoData) {
         self.geoData = geoData
+    }
+    
+    func updateCoordinate(latitude: Double, longitude: Double) {
+        geoData.latitude = latitude
+        geoData.longitude = longitude
     }
 }
 
