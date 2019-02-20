@@ -22,28 +22,28 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                             </mapView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GBw-Lt-z73">
-                                <rect key="frame" x="76" y="71.5" width="291" height="30"/>
+                                <rect key="frame" x="107" y="71.5" width="256" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9ZA-iF-Lhn">
-                                <rect key="frame" x="76" y="104" width="291" height="30"/>
+                                <rect key="frame" x="107" y="104" width="256" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="t98-I1-fd6">
-                                <rect key="frame" x="12" y="76" width="52" height="53"/>
+                                <rect key="frame" x="12" y="76" width="83" height="53"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SSID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SIX-hg-VVH">
-                                        <rect key="frame" x="0.0" y="0.0" width="52" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="83" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PSt-5s-1yt">
-                                        <rect key="frame" x="0.0" y="32.5" width="52" height="20.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Radius (m)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PSt-5s-1yt">
+                                        <rect key="frame" x="0.0" y="32.5" width="83" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -58,11 +58,11 @@
                             <constraint firstItem="9ZA-iF-Lhn" firstAttribute="centerY" secondItem="PSt-5s-1yt" secondAttribute="centerY" id="3b6-oo-JZo"/>
                             <constraint firstItem="GBw-Lt-z73" firstAttribute="centerY" secondItem="SIX-hg-VVH" secondAttribute="centerY" id="CDX-Vj-iMp"/>
                             <constraint firstItem="GBw-Lt-z73" firstAttribute="leading" secondItem="t98-I1-fd6" secondAttribute="trailing" constant="12" id="DPU-YD-IsN"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9ZA-iF-Lhn" secondAttribute="trailing" constant="8" id="Jjc-MF-v3F"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9ZA-iF-Lhn" secondAttribute="trailing" constant="12" id="Jjc-MF-v3F"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Juw-AU-pUQ" secondAttribute="trailing" id="Wg5-7b-LVs"/>
                             <constraint firstItem="Juw-AU-pUQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iNf-I9-mcq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Juw-AU-pUQ" secondAttribute="bottom" id="kEs-Fk-ajn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GBw-Lt-z73" secondAttribute="trailing" constant="8" id="n4X-5l-YWH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GBw-Lt-z73" secondAttribute="trailing" constant="12" id="n4X-5l-YWH"/>
                             <constraint firstItem="t98-I1-fd6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="v1r-Xw-QUY"/>
                             <constraint firstItem="Juw-AU-pUQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xuN-8j-L2B"/>
                         </constraints>

@@ -56,6 +56,10 @@ extension AppDelegate: CLLocationManagerDelegate {
             return
         }
         print("didEnterRegion \(region)")
+        if let nav = window?.rootViewController as? UINavigationController,
+           let controller = nav.topViewController {
+           controller.title = "Status: inside"
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
@@ -63,5 +67,9 @@ extension AppDelegate: CLLocationManagerDelegate {
             return
         }
         print("didExitRegion \(region)")
+        if let nav = window?.rootViewController as? UINavigationController,
+            let controller = nav.topViewController {
+            controller.title = "Status: outside"
+        }
     }
 }

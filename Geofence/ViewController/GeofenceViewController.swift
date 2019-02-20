@@ -35,7 +35,6 @@ class GeofenceViewController: UIViewController {
         setupKeyboard()
         setupBinding()
         setupMapView()
-        
     }
 
     func setupKeyboard() {
@@ -63,6 +62,8 @@ class GeofenceViewController: UIViewController {
         addRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
+                self?.view.endEditing(true)
+                
                 self?.updateAnnotation(for: geoData)
                 self?.updateOverlay(for: geoData)
                 
@@ -85,6 +86,8 @@ class GeofenceViewController: UIViewController {
         removeRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
+                self?.view.endEditing(true)
+                
                 self?.removeAnnotationAndOverlay()
                 self?.stopGeofenceMonitor()
             })
@@ -93,6 +96,7 @@ class GeofenceViewController: UIViewController {
         viewModel.addEnabled
             .bind(to: addRegion.rx.isEnabled)
             .disposed(by: bag)
+       
     }
     
     func updateOverlay(for geoData: GeoData) {
@@ -189,6 +193,12 @@ extension GeofenceViewController: CLLocationManagerDelegate {
                                                    message: error.localizedDescription,
                                                    okAction: AlertAction(title: "OK")))
     }
+    
+    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
+        showSingleActionAlert(dialog: AlertContent(title: "Error",
+                                                   message: error.localizedDescription,
+                                                   okAction: AlertAction(title: "OK")))
+    }
 }
 
 extension GeofenceViewController: MKMapViewDelegate {
@@ -233,8 +243,6 @@ extension GeofenceViewController: MKMapViewDelegate {
             latitude.accept(newPin.latitude)
             longitude.accept(newPin.longitude)
             pinDragged.accept(())
-//            stopGeofenceMonitor()
-//            startGeofenceMonitor()
         }
     }
     
@@ -242,9 +250,10 @@ extension GeofenceViewController: MKMapViewDelegate {
         print("\(mapView.centerCoordinate)")
         latitude.accept(mapView.centerCoordinate.latitude)
         longitude.accept(mapView.centerCoordinate.longitude)
+        
     }
 }
 
 extension GeofenceViewController: AlertDialogPresenter {
-
+    
 }
