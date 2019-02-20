@@ -17,6 +17,7 @@ Getting Started
 8. You can change the `SSID` or `Radius` anytime and tap the `Update` button, the monitoring will stop and starts with the new changes.
 9. If you relaunch the app, previously saved region will be loaded.
 10. The monitoring will stop when you tap the `delete` button.
+11. There are a few Unit Test written for Model and View Model, you can run them too.
 
 Caveat
 -------
