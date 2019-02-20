@@ -109,7 +109,7 @@ class GeofenceViewController: UIViewController {
                 case .new:
                     self?.addRegion.title = "Add"
                 case .edit:
-                    self?.addRegion.title = "update"
+                    self?.addRegion.title = "Update"
                 }
             })
             .disposed(by: bag)
