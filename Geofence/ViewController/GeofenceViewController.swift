@@ -15,8 +15,8 @@ class GeofenceViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var updateButton: UIBarButtonItem!
-    @IBOutlet weak var startMonitor: UIBarButtonItem!
     @IBOutlet weak var addRegion: UIBarButtonItem!
+    @IBOutlet weak var removeRegion: UIBarButtonItem!
     
     var locationManager = CLLocationManager()
     var viewModel = GeofenceViewModel()
@@ -45,7 +45,7 @@ class GeofenceViewController: UIViewController {
         mapView.delegate = self
         
         radius.accept(1000)
-        ssid.accept("test")
+        ssid.accept("test 123")
     }
     
     private func setupBinding() {
@@ -56,14 +56,7 @@ class GeofenceViewController: UIViewController {
                 self?.present(navController, animated: true, completion: nil)
             })
             .disposed(by: bag)
-        
-        
-        startMonitor.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.startGeofenceMonitor()
-            })
-            .disposed(by: bag)
-        
+                
         let vm = GeofenceViewModel(input: (latitude: latitude,
                                                   longitude: longitude,
                                                   radius: radius,
@@ -72,15 +65,11 @@ class GeofenceViewController: UIViewController {
         addRegion.rx.tap
             .withLatestFrom(vm.geofence)
             .subscribe(onNext: { [weak self] geoData in
-                for overlay in self?.mapView.overlays ?? [] {
-                    self?.mapView.removeOverlay(overlay)
-                }
-                for annotation in self?.mapView.annotations ?? [] {
-                    self?.mapView.removeAnnotation(annotation)
-                }
-                self?.mapView.addAnnotation(geoData)
-                self?.mapView.addOverlay(MKCircle(center: geoData.coordinate,
-                                                  radius: geoData.radius))
+                self?.updateAnnotation(for: geoData)
+                self?.updateOverlay(for: geoData)
+                
+                self?.stopGeofenceMonitor()
+                self?.startGeofenceMonitor(with: geoData)
             })
             .disposed(by: bag)
         
@@ -88,16 +77,46 @@ class GeofenceViewController: UIViewController {
             .skip(1)
             .withLatestFrom(vm.geofence)
             .subscribe(onNext: { [weak self] geoData in
-                for overlay in self?.mapView.overlays ?? [] {
-                    self?.mapView.removeOverlay(overlay)
-                }
-                self?.mapView.addOverlay(MKCircle(center: geoData.coordinate,
-                                                  radius: geoData.radius))
+                self?.updateOverlay(for: geoData)
+                
+                self?.stopGeofenceMonitor()
+                self?.startGeofenceMonitor(with: geoData)
             })
             .disposed(by: bag)
 
-
+        removeRegion.rx.tap
+            .withLatestFrom(vm.geofence)
+            .subscribe(onNext: { [weak self] geoData in
+                self?.removeAnnotationAndOverlay()
+                self?.stopGeofenceMonitor()
+            })
+            .disposed(by: bag)
         
+        
+    }
+    
+    private func updateOverlay(for geoData: GeoData) {
+        for overlay in mapView.overlays {
+            mapView.removeOverlay(overlay)
+        }
+        mapView.addOverlay(MKCircle(center: geoData.coordinate,
+                                    radius: geoData.radius))
+    }
+    
+    private func updateAnnotation(for geoData: GeoData) {
+        for annotation in mapView.annotations {
+            mapView.removeAnnotation(annotation)
+        }
+        mapView.addAnnotation(geoData)
+    }
+    
+    private func removeAnnotationAndOverlay() {
+        for overlay in mapView.overlays {
+            mapView.removeOverlay(overlay)
+        }
+        for annotation in mapView.annotations {
+            mapView.removeAnnotation(annotation)
+        }
     }
     
     func zoom(to coordinate: CLLocationCoordinate2D? = nil) {
@@ -106,11 +125,11 @@ class GeofenceViewController: UIViewController {
         mapView.setRegion(region, animated: true)
     }
     
-    func startGeofenceMonitor() {
+    func startGeofenceMonitor(with geoData: GeoData) {
         
-        let region = CLCircularRegion(center: viewModel.geoData.coordinate,
-                                      radius: viewModel.geoData.radius,
-                                      identifier: viewModel.geoData.ssid)
+        let region = CLCircularRegion(center: geoData.coordinate,
+                                      radius: geoData.radius,
+                                      identifier: geoData.ssid)
         region.notifyOnEntry = true
         region.notifyOnExit = true
         
@@ -126,10 +145,8 @@ class GeofenceViewController: UIViewController {
     }
     
     func stopGeofenceMonitor() {
+        
         for region in locationManager.monitoredRegions {
-            guard let region = region as? CLCircularRegion, region.identifier == viewModel.geoData.ssid else {
-                return
-            }
             locationManager.stopMonitoring(for: region)
         }
     }

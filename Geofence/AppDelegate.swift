@@ -52,10 +52,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("didEnterRegion")
+        guard region is CLCircularRegion else {
+            return
+        }
+        print("didEnterRegion \(region)")
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        print("didExitRegion")
+        guard region is CLCircularRegion else {
+            return
+        }
+        print("didExitRegion \(region)")
     }
 }
