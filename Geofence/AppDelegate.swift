@@ -67,8 +67,21 @@ extension AppDelegate: CLLocationManagerDelegate {
             return
         }
         print("didExitRegion \(region)")
-        if let nav = window?.rootViewController as? UINavigationController,
-            let controller = nav.topViewController {
+
+        guard let nav = window?.rootViewController as? UINavigationController,
+            let controller = nav.topViewController else { return }
+
+        guard let ssid = Utility.getWiFiSsid() else {
+            // can't access SSID
+            controller.title = "Status: outside"
+            return
+        }
+        
+        if ssid == region.identifier {
+            // still connected to geofence's SSID
+            controller.title = "Status: inside"
+        } else {
+            // not connected anymore
             controller.title = "Status: outside"
         }
     }
