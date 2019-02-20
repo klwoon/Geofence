@@ -14,56 +14,54 @@ import RxCocoa
 class GeofenceViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var updateButton: UIBarButtonItem!
     @IBOutlet weak var addRegion: UIBarButtonItem!
     @IBOutlet weak var removeRegion: UIBarButtonItem!
     
+    @IBOutlet weak var ssid: UITextField!
+    @IBOutlet weak var radius: UITextField!
+    
     var locationManager = CLLocationManager()
-    var viewModel = GeofenceViewModel()
     let bag = DisposeBag()
     
     // Observables
     let latitude = BehaviorRelay<Double>(value: 0)
     let longitude = BehaviorRelay<Double>(value: 0)
-    let radius = BehaviorRelay<Double>(value: 0)
-    let ssid = BehaviorRelay<String>(value: "")
     let pinDragged = BehaviorRelay<Void>(value: ())
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        setupKeyboard()
         setupBinding()
         setupMapView()
         
-//        self.viewModel = viewModel
     }
 
-    private func setupMapView() {
+    func setupKeyboard() {
+        radius.keyboardType = .numberPad
+        ssid.keyboardType = .default
+    }
+    
+    func setupMapView() {
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         mapView.delegate = self
         
-        radius.accept(1000)
-        ssid.accept("test 123")
     }
     
-    private func setupBinding() {
-        updateButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                guard let controller = UIStoryboard(name: StoryboardId.main, bundle: nil).instantiateViewController(withIdentifier: StoryboardId.updateGeofenceViewController) as? UpdateGeofenceViewController else { return }
-                let navController = UINavigationController(rootViewController: controller)
-                self?.present(navController, animated: true, completion: nil)
-            })
-            .disposed(by: bag)
-                
-        let vm = GeofenceViewModel(input: (latitude: latitude,
+    func setupBinding() {
+        
+        let radiusInput = radius.rx.text.orEmpty.map { Double($0) ?? 0 }
+        let ssidInput = ssid.rx.text.orEmpty.asObservable()
+        let viewModel = GeofenceViewModel(input: (latitude: latitude,
                                                   longitude: longitude,
-                                                  radius: radius,
-                                                  ssid: ssid))
+                                                  radius: radiusInput,
+                                                  ssid: ssidInput),
+                                          maxRadius: locationManager.maximumRegionMonitoringDistance)
         
         addRegion.rx.tap
-            .withLatestFrom(vm.geofence)
+            .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
                 self?.updateAnnotation(for: geoData)
                 self?.updateOverlay(for: geoData)
@@ -75,7 +73,7 @@ class GeofenceViewController: UIViewController {
         
         pinDragged
             .skip(1)
-            .withLatestFrom(vm.geofence)
+            .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
                 self?.updateOverlay(for: geoData)
                 
@@ -85,17 +83,19 @@ class GeofenceViewController: UIViewController {
             .disposed(by: bag)
 
         removeRegion.rx.tap
-            .withLatestFrom(vm.geofence)
+            .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
                 self?.removeAnnotationAndOverlay()
                 self?.stopGeofenceMonitor()
             })
             .disposed(by: bag)
         
-        
+        viewModel.addEnabled
+            .bind(to: addRegion.rx.isEnabled)
+            .disposed(by: bag)
     }
     
-    private func updateOverlay(for geoData: GeoData) {
+    func updateOverlay(for geoData: GeoData) {
         for overlay in mapView.overlays {
             mapView.removeOverlay(overlay)
         }
@@ -103,14 +103,14 @@ class GeofenceViewController: UIViewController {
                                     radius: geoData.radius))
     }
     
-    private func updateAnnotation(for geoData: GeoData) {
+    func updateAnnotation(for geoData: GeoData) {
         for annotation in mapView.annotations {
             mapView.removeAnnotation(annotation)
         }
         mapView.addAnnotation(geoData)
     }
     
-    private func removeAnnotationAndOverlay() {
+    func removeAnnotationAndOverlay() {
         for overlay in mapView.overlays {
             mapView.removeOverlay(overlay)
         }

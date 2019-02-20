@@ -24,27 +24,29 @@ protocol PersistData {
 class GeofenceViewModel: ViewModel {
     var geoData: GeoData
     var geofence: Observable<GeoData> = .never()
+    var addEnabled: Observable<Bool>
     
-    init() {
-        self.geoData = GeoData()
-    }
+//    init() {
+//        self.geoData = GeoData()
+//    }
+//
+//    init(geoData: GeoData) {
+//        self.geoData = geoData
+//    }
     
-    init(geoData: GeoData) {
-        self.geoData = geoData
-    }
-    
-    init(input: (latitude: BehaviorRelay<Double>, longitude: BehaviorRelay<Double>, radius: BehaviorRelay<Double>, ssid: BehaviorRelay<String>)) {
+    init(input: (latitude: BehaviorRelay<Double>, longitude: BehaviorRelay<Double>, radius: Observable<Double>, ssid: Observable<String>),
+         maxRadius: Double) {
         self.geoData = GeoData()
         
         let inputs = Observable
             .combineLatest(input.latitude.asObservable(),
                            input.longitude.asObservable(),
-                           input.radius.asObservable(),
-                           input.ssid.asObservable())
+                           input.radius,
+                           input.ssid)
 //            .skip(1)
             .share(replay: 1)
         
-        let foo = inputs
+        geofence = inputs
             .flatMapLatest { (arg) -> Observable<GeoData> in
             
                 let (latitude, longitude, radius, ssid) = arg
@@ -52,8 +54,24 @@ class GeofenceViewModel: ViewModel {
                 return Observable.just(data)
             }
             .share(replay: 1)
+ 
+        let isRadiusValid = input.radius
+            .map { value -> Bool in
+                guard value > 0, value < maxRadius else {
+                    return false
+                }
+                return true
+            }
+            .share(replay: 1)
         
-        geofence = foo
+        let isSSIDValid = input.ssid
+            .map { $0.count > 0 }
+            .share(replay: 1)
+
+        addEnabled = Observable
+            .combineLatest(isRadiusValid, isSSIDValid) { $0 && $1 }
+            .distinctUntilChanged()
+            .share(replay: 1)
         
         
     }
