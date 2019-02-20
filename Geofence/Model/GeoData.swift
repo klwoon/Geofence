@@ -16,6 +16,7 @@ class GeoData: NSObject, Codable, MKAnnotation {
     var radius: Double
     var ssid: String
     
+    // this property is used by MKAnnotation, we don't store it but derived from latitude/longitude
     var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid
     
     enum CodingKeys: String, CodingKey {

@@ -9,6 +9,7 @@
 import UIKit
 import SystemConfiguration.CaptiveNetwork
 
+// used by UIAlertController content
 struct AlertContent {
     let title: String
     let message: String
@@ -23,6 +24,7 @@ struct AlertContent {
     }
 }
 
+// used by UIAlertController actions
 struct AlertAction {
     let title: String
     let action: (() -> Void)?

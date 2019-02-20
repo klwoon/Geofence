@@ -25,6 +25,7 @@ class GeofenceViewModel: ViewModel {
     var geofence: Observable<GeoData> = .never()
     var addEnabled: Observable<Bool>
     
+    // view model to bind four inputs from view controller, and one dependency (maximum radius)
     init(input: (latitude: BehaviorRelay<Double>, longitude: BehaviorRelay<Double>, radius: Observable<Double>, ssid: Observable<String>),
          maxRadius: Double) {
         
@@ -44,6 +45,7 @@ class GeofenceViewModel: ViewModel {
             }
             .share(replay: 1)
  
+        // some simple validations
         let isRadiusValid = input.radius
             .map { value -> Bool in
                 guard value > 0, value < maxRadius else {
@@ -57,6 +59,7 @@ class GeofenceViewModel: ViewModel {
             .map { $0.count > 0 }
             .share(replay: 1)
 
+        // only enable button is validated
         addEnabled = Observable
             .combineLatest(isRadiusValid, isSSIDValid) { $0 && $1 }
             .distinctUntilChanged()

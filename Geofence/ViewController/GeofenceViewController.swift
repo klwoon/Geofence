@@ -40,6 +40,14 @@ class GeofenceViewController: UIViewController {
         setupBinding()
     }
     
+    deinit {
+        print("deinit: \(String(describing: type(of: self)))")
+    }
+}
+
+// MARK: Common methods
+extension GeofenceViewController {
+
     func setupKeyboard() {
         radius.keyboardType = .numberPad
         ssid.keyboardType = .default
@@ -49,19 +57,21 @@ class GeofenceViewController: UIViewController {
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         mapView.delegate = self
-        
     }
     
     func setupBinding() {
         
+        // setup binding between view controller and view model
         let radiusInput = radius.rx.text.orEmpty.map { Double($0) ?? 0 }
         let ssidInput = ssid.rx.text.orEmpty.asObservable()
+        
         let viewModel = GeofenceViewModel(input: (latitude: latitude,
                                                   longitude: longitude,
                                                   radius: radiusInput,
                                                   ssid: ssidInput),
                                           maxRadius: locationManager.maximumRegionMonitoringDistance)
         
+        // Add/Update button binding
         addRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
             .do(onNext: { geoData in
@@ -72,6 +82,7 @@ class GeofenceViewController: UIViewController {
             })
             .disposed(by: bag)
         
+        // Annotation dragged binding
         pinDragged
             .skip(1)
             .withLatestFrom(viewModel.geofence)
@@ -86,6 +97,7 @@ class GeofenceViewController: UIViewController {
             })
             .disposed(by: bag)
 
+        // Remove button binding
         removeRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
             .do(onNext: { geoData in
@@ -98,10 +110,12 @@ class GeofenceViewController: UIViewController {
             })
             .disposed(by: bag)
         
+        // Validation to enable/disable Add/Update Button
         viewModel.addEnabled
             .bind(to: addRegion.rx.isEnabled)
             .disposed(by: bag)
        
+        // A state to track the Add/Update button
         addRegionState
             .asObservable()
             .subscribe(onNext: { [weak self] state in
@@ -114,10 +128,12 @@ class GeofenceViewController: UIViewController {
             })
             .disposed(by: bag)
         
+        // Check if previous data is available and draw it
         checkSavedData(viewModel)
     }
     
     func updateOverlay(for geoData: GeoData) {
+        // Remove all overlay before drawing a new one
         for overlay in mapView.overlays {
             mapView.removeOverlay(overlay)
         }
@@ -126,6 +142,7 @@ class GeofenceViewController: UIViewController {
     }
     
     func updateAnnotation(for geoData: GeoData) {
+        // Remove all pins before adding a new one
         for annotation in mapView.annotations {
             mapView.removeAnnotation(annotation)
         }
@@ -136,6 +153,7 @@ class GeofenceViewController: UIViewController {
         updateAnnotation(for: geoData)
         updateOverlay(for: geoData)
         
+        // Stop and restart the monitoring service
         stopGeofenceMonitor()
         startGeofenceMonitor(with: geoData)
         
@@ -143,6 +161,7 @@ class GeofenceViewController: UIViewController {
     }
 
     func removeAnnotationAndOverlay() {
+        // Clear all pins/ overlay
         for overlay in mapView.overlays {
             mapView.removeOverlay(overlay)
         }
@@ -154,13 +173,14 @@ class GeofenceViewController: UIViewController {
     }
     
     func zoom(to coordinate: CLLocationCoordinate2D? = nil) {
+        // After location is fixed, zoom to it
         let location = coordinate ?? mapView.userLocation.coordinate
         let region = MKCoordinateRegion(center: location, latitudinalMeters: 10000, longitudinalMeters: 10000)
         mapView.setRegion(region, animated: true)
     }
     
     func startGeofenceMonitor(with geoData: GeoData) {
-        
+        // Create a circular region
         let region = CLCircularRegion(center: geoData.coordinate,
                                       radius: geoData.radius,
                                       identifier: geoData.ssid)
@@ -179,7 +199,7 @@ class GeofenceViewController: UIViewController {
     }
     
     func stopGeofenceMonitor() {
-        
+        // Stop monitoring
         for region in locationManager.monitoredRegions {
             locationManager.stopMonitoring(for: region)
         }
@@ -192,21 +212,19 @@ class GeofenceViewController: UIViewController {
         
         savedData.coordinate = CLLocationCoordinate2D(latitude: savedData.latitude, longitude: savedData.longitude)
         
+        // Populate the saved data into UITextFields
         latitude.accept(savedData.latitude)
         longitude.accept(savedData.longitude)
         radius.insertText(String(Int(savedData.radius)))
         ssid.insertText(savedData.ssid)
 
+        // Add the pin and overlay and start the monitoring service
         addAnnotationAndOverlay(with: savedData)
 
     }
-    
-    deinit {
-        print("deinit: \(String(describing: type(of: self)))")
-    }
-
 }
 
+// MARK: CLLocationManagerDelegate
 extension GeofenceViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -231,7 +249,6 @@ extension GeofenceViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         zoom(to: locations.first?.coordinate)
-        
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -251,11 +268,13 @@ extension GeofenceViewController: CLLocationManagerDelegate {
     }
 }
 
+// MARK: MKMapViewDelegate
 extension GeofenceViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard annotation is GeoData else { return nil }
         
+        // Recycle the pin if available
         let identifier = "geofence_annotation"
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
         
@@ -277,6 +296,7 @@ extension GeofenceViewController: MKMapViewDelegate {
         guard overlay is MKCircle else {
             return MKOverlayRenderer(overlay: overlay)
         }
+        // Draw the circular overlay
         let circle = MKCircleRenderer(overlay: overlay)
         circle.lineWidth = 1
         circle.strokeColor = .black
@@ -286,6 +306,7 @@ extension GeofenceViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {
         
+        // Update the view model coordinates when drag action is ended
         if newState == .ending {
             guard let newPin = view.annotation?.coordinate else { return }
             print("new: \(newPin.latitude) \(newPin.longitude)")
@@ -300,12 +321,14 @@ extension GeofenceViewController: MKMapViewDelegate {
         print("\(mapView.centerCoordinate)")
         guard addRegionState.value == .new else { return }
         
+        // Update the view model coordinates
         latitude.accept(mapView.centerCoordinate.latitude)
         longitude.accept(mapView.centerCoordinate.longitude)
         
     }
 }
 
+// MARK: AlertDialogPresenter
 extension GeofenceViewController: AlertDialogPresenter {
-    
+    // conform to show UIAlertController
 }
