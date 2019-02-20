@@ -21,6 +21,10 @@ protocol PersistData {
 class GeofenceViewModel: ViewModel {
     var geoData: GeoData
     
+    init() {
+        self.geoData = GeoData()
+    }
+    
     init(geoData: GeoData) {
         self.geoData = geoData
     }

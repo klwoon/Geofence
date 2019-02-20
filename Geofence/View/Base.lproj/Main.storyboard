@@ -32,10 +32,16 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="iVu-1C-9hY">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="WUs-nE-Ykl"/>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="edit" id="WUs-nE-Ykl"/>
+                            <barButtonItem systemItem="play" id="fTv-3P-fXE"/>
+                            <barButtonItem systemItem="add" id="znP-RC-Upv"/>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="addRegion" destination="znP-RC-Upv" id="odd-eg-09l"/>
                         <outlet property="mapView" destination="Juw-AU-pUQ" id="YC5-jK-BEY"/>
+                        <outlet property="startMonitor" destination="fTv-3P-fXE" id="ghg-bS-Kwr"/>
                         <outlet property="updateButton" destination="WUs-nE-Ykl" id="TNi-cg-yHu"/>
                     </connections>
                 </viewController>

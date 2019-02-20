@@ -15,9 +15,11 @@ class GeofenceViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var updateButton: UIBarButtonItem!
+    @IBOutlet weak var startMonitor: UIBarButtonItem!
+    @IBOutlet weak var addRegion: UIBarButtonItem!
     
     var locationManager = CLLocationManager()
-    var viewModel: GeofenceViewModel?
+    var viewModel = GeofenceViewModel()
     let bag = DisposeBag()
     
     override func viewDidLoad() {
@@ -27,14 +29,7 @@ class GeofenceViewController: UIViewController {
         setupBinding()
         setupMapView()
         
-        // test adding annotation
-        let data = GeoData(id: 1, latitude: 3.09722, longitude: 101.64444, radius: 1000, ssid: "ssid")
-//        data.coordinate = CLLocationCoordinate2D(latitude: data.latitude, longitude: data.longitude)
-        let viewModel = GeofenceViewModel(geoData: data)
-        mapView.addAnnotation(viewModel.geoData)
-        mapView.addOverlay(MKCircle(center: data.coordinate, radius: data.radius))
-        
-        self.viewModel = viewModel
+//        self.viewModel = viewModel
     }
 
     private func setupMapView() {
@@ -52,12 +47,60 @@ class GeofenceViewController: UIViewController {
             })
             .disposed(by: bag)
         
+        addRegion.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                self?.addGeofenceRegion()
+            })
+            .disposed(by: bag)
+        
+        startMonitor.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                self?.startGeofenceMonitor()
+            })
+            .disposed(by: bag)
+        
     }
     
     func zoom(to coordinate: CLLocationCoordinate2D? = nil) {
         let location = coordinate ?? mapView.userLocation.coordinate
         let region = MKCoordinateRegion(center: location, latitudinalMeters: 10000, longitudinalMeters: 10000)
         mapView.setRegion(region, animated: true)
+    }
+    
+    func addGeofenceRegion() {
+        // test adding annotation
+        let data = GeoData(id: 1, latitude: 3.09722, longitude: 101.64444, radius: 1000, ssid: "ssid")
+        viewModel.geoData = data
+        mapView.addAnnotation(viewModel.geoData)
+        mapView.addOverlay(MKCircle(center: data.coordinate, radius: data.radius))
+    }
+    
+    func startGeofenceMonitor() {
+        
+        let region = CLCircularRegion(center: viewModel.geoData.coordinate,
+                                      radius: viewModel.geoData.radius,
+                                      identifier: viewModel.geoData.ssid)
+        region.notifyOnEntry = true
+        region.notifyOnExit = true
+        
+        guard CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self),
+            CLLocationManager.authorizationStatus() == .authorizedAlways
+        else {
+            showSingleActionAlert(dialog: AlertContent(title: "Error",
+                                                       message: "Monitoring not available",
+                                                       okAction: AlertAction(title: "OK") ))
+            return
+        }
+        locationManager.startMonitoring(for: region)
+    }
+    
+    func stopGeofenceMonitor() {
+        for region in locationManager.monitoredRegions {
+            guard let region = region as? CLCircularRegion, region.identifier == viewModel.geoData.ssid else {
+                return
+            }
+            locationManager.stopMonitoring(for: region)
+        }
     }
     
     deinit {
@@ -142,11 +185,11 @@ extension GeofenceViewController: MKMapViewDelegate {
                 mapView.removeOverlay(overlay)
             }
             
-            viewModel?.updateCoordinate(latitude: newPin.latitude, longitude: newPin.longitude)
+            viewModel.updateCoordinate(latitude: newPin.latitude, longitude: newPin.longitude)
             
-            guard let data = viewModel?.geoData else { return }
-            
-            mapView.addOverlay(MKCircle(center: data.coordinate, radius: data.radius))
+            mapView.addOverlay(MKCircle(center: viewModel.geoData.coordinate, radius: viewModel.geoData.radius))
+            stopGeofenceMonitor()
+            startGeofenceMonitor()
         }
     }
 }

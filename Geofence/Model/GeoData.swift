@@ -11,10 +11,10 @@ import MapKit
 
 class GeoData: NSObject, Codable, MKAnnotation {
     var id: Int = 0
-    var latitude: Double
-    var longitude: Double
-    var radius: Double
-    var ssid: String
+    var latitude: Double = 0
+    var longitude: Double = 0
+    var radius: Double = 0
+    var ssid: String = ""
     
     var coordinate: CLLocationCoordinate2D = kCLLocationCoordinate2DInvalid
     
@@ -26,6 +26,9 @@ class GeoData: NSObject, Codable, MKAnnotation {
         case ssid
     }
 
+    override init() {
+    }
+    
     init(id: Int, latitude: Double, longitude: Double, radius: Double, ssid: String) {
         self.id = id
         self.latitude = latitude
