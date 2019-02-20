@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 protocol ViewModel {
     var geoData: GeoData { get }
+    
     func updateCoordinate(latitude: Double, longitude: Double)
 }
 
@@ -20,6 +23,7 @@ protocol PersistData {
 
 class GeofenceViewModel: ViewModel {
     var geoData: GeoData
+    var geofence: Observable<GeoData> = .never()
     
     init() {
         self.geoData = GeoData()
@@ -27,6 +31,31 @@ class GeofenceViewModel: ViewModel {
     
     init(geoData: GeoData) {
         self.geoData = geoData
+    }
+    
+    init(input: (latitude: BehaviorRelay<Double>, longitude: BehaviorRelay<Double>, radius: BehaviorRelay<Double>, ssid: BehaviorRelay<String>)) {
+        self.geoData = GeoData()
+        
+        let inputs = Observable
+            .combineLatest(input.latitude.asObservable(),
+                           input.longitude.asObservable(),
+                           input.radius.asObservable(),
+                           input.ssid.asObservable())
+//            .skip(1)
+            .share(replay: 1)
+        
+        let foo = inputs
+            .flatMapLatest { (arg) -> Observable<GeoData> in
+            
+                let (latitude, longitude, radius, ssid) = arg
+                let data = GeoData(id: 0, latitude: latitude, longitude: longitude, radius: radius, ssid: ssid)
+                return Observable.just(data)
+            }
+            .share(replay: 1)
+        
+        geofence = foo
+        
+        
     }
     
     func updateCoordinate(latitude: Double, longitude: Double) {

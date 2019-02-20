@@ -13,7 +13,7 @@ struct MockData {
     static let id = 123
     static let latitude = 3.140543
     static let longitude = 101.695231
-    static let radius = 500
+    static let radius = 500.0
     static let ssid = "Test Wifi"
 }
 
@@ -22,7 +22,7 @@ extension GeoData {
     static func mock(with id: Int = MockData.id,
                      latitude: Double = MockData.latitude,
                      longitude: Double = MockData.longitude,
-                     radius: Int = MockData.radius,
+                     radius: Double = MockData.radius,
                      ssid: String = MockData.ssid) -> GeoData {
         return GeoData(id: id,
                        latitude: latitude,
