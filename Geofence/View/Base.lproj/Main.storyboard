@@ -21,14 +21,14 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Juw-AU-pUQ">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                             </mapView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GBw-Lt-z73">
-                                <rect key="frame" x="107" y="71.5" width="256" height="30"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Input Wifi SSID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GBw-Lt-z73">
+                                <rect key="frame" x="103" y="71.5" width="260" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9ZA-iF-Lhn">
-                                <rect key="frame" x="107" y="104" width="256" height="30"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Input geofence radius (in meters)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9ZA-iF-Lhn">
+                                <rect key="frame" x="103" y="104" width="260" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -53,11 +53,11 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="9ZA-iF-Lhn" firstAttribute="leading" secondItem="t98-I1-fd6" secondAttribute="trailing" constant="12" id="1dc-Au-B55"/>
+                            <constraint firstItem="9ZA-iF-Lhn" firstAttribute="leading" secondItem="t98-I1-fd6" secondAttribute="trailing" constant="8" id="1dc-Au-B55"/>
                             <constraint firstItem="t98-I1-fd6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="12" id="33F-M7-Z2C"/>
                             <constraint firstItem="9ZA-iF-Lhn" firstAttribute="centerY" secondItem="PSt-5s-1yt" secondAttribute="centerY" id="3b6-oo-JZo"/>
                             <constraint firstItem="GBw-Lt-z73" firstAttribute="centerY" secondItem="SIX-hg-VVH" secondAttribute="centerY" id="CDX-Vj-iMp"/>
-                            <constraint firstItem="GBw-Lt-z73" firstAttribute="leading" secondItem="t98-I1-fd6" secondAttribute="trailing" constant="12" id="DPU-YD-IsN"/>
+                            <constraint firstItem="GBw-Lt-z73" firstAttribute="leading" secondItem="t98-I1-fd6" secondAttribute="trailing" constant="8" id="DPU-YD-IsN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9ZA-iF-Lhn" secondAttribute="trailing" constant="12" id="Jjc-MF-v3F"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Juw-AU-pUQ" secondAttribute="trailing" id="Wg5-7b-LVs"/>
                             <constraint firstItem="Juw-AU-pUQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iNf-I9-mcq"/>
@@ -86,29 +86,6 @@
             </objects>
             <point key="canvasLocation" x="991.20000000000005" y="72.413793103448285"/>
         </scene>
-        <!--Update Geofence View Controller-->
-        <scene sceneID="e8g-zI-KqV">
-            <objects>
-                <viewController storyboardIdentifier="UpdateGeofenceViewController" id="DE4-NF-eHd" customClass="UpdateGeofenceViewController" customModule="Geofence" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="iY8-IV-NPw">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="Qfv-4S-u3L"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Di2-kf-YVx">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="GWh-88-HiE"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="fOF-8R-xkG"/>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="cancelButton" destination="GWh-88-HiE" id="Spc-38-cjL"/>
-                        <outlet property="doneButton" destination="fOF-8R-xkG" id="ysf-a2-9LV"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Of-zg-mAq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2826.4000000000001" y="71.514242878560722"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Hmu-K9-SV1">
             <objects>
@@ -126,24 +103,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ef-lD-C6e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="124" y="72"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="7br-jE-U5q">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="VaF-1t-4Gx" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="B6M-7D-YVr">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="DE4-NF-eHd" kind="relationship" relationship="rootViewController" id="GtA-Da-urt"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SRB-DR-4U9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1887.2" y="71.514242878560722"/>
         </scene>
     </scenes>
 </document>

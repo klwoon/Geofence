@@ -35,6 +35,7 @@ class GeofenceViewController: UIViewController {
         setupKeyboard()
         setupBinding()
         setupMapView()
+        stopGeofenceMonitor()
     }
 
     func setupKeyboard() {
@@ -62,7 +63,6 @@ class GeofenceViewController: UIViewController {
         addRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
-                self?.view.endEditing(true)
                 
                 self?.updateAnnotation(for: geoData)
                 self?.updateOverlay(for: geoData)
@@ -86,7 +86,6 @@ class GeofenceViewController: UIViewController {
         removeRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
             .subscribe(onNext: { [weak self] geoData in
-                self?.view.endEditing(true)
                 
                 self?.removeAnnotationAndOverlay()
                 self?.stopGeofenceMonitor()
@@ -153,6 +152,8 @@ class GeofenceViewController: UIViewController {
         for region in locationManager.monitoredRegions {
             locationManager.stopMonitoring(for: region)
         }
+        view.endEditing(true)
+        title = "Status: inactive"
     }
     
     deinit {
@@ -198,6 +199,10 @@ extension GeofenceViewController: CLLocationManagerDelegate {
         showSingleActionAlert(dialog: AlertContent(title: "Error",
                                                    message: error.localizedDescription,
                                                    okAction: AlertAction(title: "OK")))
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        title = "Status: waiting"
     }
 }
 
