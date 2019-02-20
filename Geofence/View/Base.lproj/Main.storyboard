@@ -71,7 +71,7 @@
                     <navigationItem key="navigationItem" id="iVu-1C-9hY">
                         <rightBarButtonItems>
                             <barButtonItem systemItem="trash" id="fTv-3P-fXE"/>
-                            <barButtonItem systemItem="add" id="znP-RC-Upv"/>
+                            <barButtonItem title="Add" id="znP-RC-Upv"/>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>

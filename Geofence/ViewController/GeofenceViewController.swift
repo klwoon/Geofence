@@ -22,6 +22,7 @@ class GeofenceViewController: UIViewController {
     
     var locationManager = CLLocationManager()
     let bag = DisposeBag()
+    var addRegionState = BehaviorRelay<ButtonState>(value: .new)
     
     // Observables
     let latitude = BehaviorRelay<Double>(value: 0)
@@ -101,6 +102,18 @@ class GeofenceViewController: UIViewController {
             .bind(to: addRegion.rx.isEnabled)
             .disposed(by: bag)
        
+        addRegionState
+            .asObservable()
+            .subscribe(onNext: { [weak self] state in
+                switch state {
+                case .new:
+                    self?.addRegion.title = "Add"
+                case .edit:
+                    self?.addRegion.title = "update"
+                }
+            })
+            .disposed(by: bag)
+        
         checkSavedData(viewModel)
     }
     
@@ -125,6 +138,8 @@ class GeofenceViewController: UIViewController {
         
         stopGeofenceMonitor()
         startGeofenceMonitor(with: geoData)
+        
+        addRegionState.accept(.edit)
     }
 
     func removeAnnotationAndOverlay() {
@@ -134,6 +149,8 @@ class GeofenceViewController: UIViewController {
         for annotation in mapView.annotations {
             mapView.removeAnnotation(annotation)
         }
+        
+        addRegionState.accept(.new)
     }
     
     func zoom(to coordinate: CLLocationCoordinate2D? = nil) {
@@ -281,6 +298,8 @@ extension GeofenceViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print("\(mapView.centerCoordinate)")
+        guard addRegionState.value == .new else { return }
+        
         latitude.accept(mapView.centerCoordinate.latitude)
         longitude.accept(mapView.centerCoordinate.longitude)
         

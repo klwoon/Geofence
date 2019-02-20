@@ -81,6 +81,11 @@ extension UIApplication {
     }
 }
 
+enum ButtonState {
+    case new
+    case edit
+}
+
 struct Utility {
     
     static func getWiFiSsid() -> String? {
