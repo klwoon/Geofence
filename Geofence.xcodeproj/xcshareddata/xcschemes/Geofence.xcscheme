@@ -85,7 +85,7 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <LocationScenarioReference
-         identifier = "../Geofence/Resource/Kuala Lumpur.gpx"
+         identifier = "../Geofence/Resource/Movements.gpx"
          referenceType = "0">
       </LocationScenarioReference>
    </LaunchAction>

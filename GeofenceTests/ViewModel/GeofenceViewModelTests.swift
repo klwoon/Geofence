@@ -33,6 +33,10 @@ class GeofenceViewModelTests: XCTestCase {
         XCTAssertEqual(data?.radius, mock.radius)
         XCTAssertEqual(data?.ssid, mock.ssid)
         
+        viewModel.deleteGeoData()
+        let newData = viewModel.getGeoData()
+        XCTAssertNil(newData)
+        
     }
     
     func testGeofenceObservable() {

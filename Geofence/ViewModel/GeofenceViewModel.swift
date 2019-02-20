@@ -18,6 +18,7 @@ protocol ViewModel {
 protocol PersistData {
     func saveGeoData(geoData: GeoData)
     func getGeoData() -> GeoData?
+    func deleteGeoData()
 }
 
 class GeofenceViewModel: ViewModel {
@@ -86,5 +87,9 @@ extension GeofenceViewModel: PersistData {
             print(error)
         }
         return nil
+    }
+    
+    func deleteGeoData() {
+        UserDefaults.standard.removeObject(forKey: Constant.geoDataKey)
     }
 }

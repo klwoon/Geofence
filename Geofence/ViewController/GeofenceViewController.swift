@@ -32,12 +32,13 @@ class GeofenceViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        setupKeyboard()
-        setupBinding()
         setupMapView()
         stopGeofenceMonitor()
+        
+        setupKeyboard()
+        setupBinding()
     }
-
+    
     func setupKeyboard() {
         radius.keyboardType = .numberPad
         ssid.keyboardType = .default
@@ -62,19 +63,20 @@ class GeofenceViewController: UIViewController {
         
         addRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
+            .do(onNext: { geoData in
+                viewModel.saveGeoData(geoData: geoData)
+            })
             .subscribe(onNext: { [weak self] geoData in
-                
-                self?.updateAnnotation(for: geoData)
-                self?.updateOverlay(for: geoData)
-                
-                self?.stopGeofenceMonitor()
-                self?.startGeofenceMonitor(with: geoData)
+                self?.addAnnotationAndOverlay(with: geoData)
             })
             .disposed(by: bag)
         
         pinDragged
             .skip(1)
             .withLatestFrom(viewModel.geofence)
+            .do(onNext: { geoData in
+                viewModel.saveGeoData(geoData: geoData)
+            })
             .subscribe(onNext: { [weak self] geoData in
                 self?.updateOverlay(for: geoData)
                 
@@ -85,6 +87,9 @@ class GeofenceViewController: UIViewController {
 
         removeRegion.rx.tap
             .withLatestFrom(viewModel.geofence)
+            .do(onNext: { geoData in
+                viewModel.deleteGeoData()
+            })
             .subscribe(onNext: { [weak self] geoData in
                 
                 self?.removeAnnotationAndOverlay()
@@ -96,6 +101,7 @@ class GeofenceViewController: UIViewController {
             .bind(to: addRegion.rx.isEnabled)
             .disposed(by: bag)
        
+        checkSavedData(viewModel)
     }
     
     func updateOverlay(for geoData: GeoData) {
@@ -113,6 +119,14 @@ class GeofenceViewController: UIViewController {
         mapView.addAnnotation(geoData)
     }
     
+    func addAnnotationAndOverlay(with geoData: GeoData) {
+        updateAnnotation(for: geoData)
+        updateOverlay(for: geoData)
+        
+        stopGeofenceMonitor()
+        startGeofenceMonitor(with: geoData)
+    }
+
     func removeAnnotationAndOverlay() {
         for overlay in mapView.overlays {
             mapView.removeOverlay(overlay)
@@ -154,6 +168,20 @@ class GeofenceViewController: UIViewController {
         }
         view.endEditing(true)
         title = "Status: inactive"
+    }
+    
+    func checkSavedData(_ viewModel: GeofenceViewModel) {
+        guard let savedData = viewModel.getGeoData() else { return }
+        
+        savedData.coordinate = CLLocationCoordinate2D(latitude: savedData.latitude, longitude: savedData.longitude)
+        
+        latitude.accept(savedData.latitude)
+        longitude.accept(savedData.longitude)
+        radius.insertText(String(Int(savedData.radius)))
+        ssid.insertText(savedData.ssid)
+
+        addAnnotationAndOverlay(with: savedData)
+
     }
     
     deinit {
